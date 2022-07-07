@@ -18,7 +18,7 @@ class SessionHelper:
     def logout(self):
         wd = self.app.wd
         wd.find_element("link text", "Logout").click()
-        time.sleep(0.2)
+        wd.find_element("name", "user")
 
     def ensure_logout(self):
         wd = self.app.wd
