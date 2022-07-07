@@ -14,7 +14,7 @@ class ContactHelper:
         self.return_to_homepage()
 
     def modify_first(self, contact):
-        self.go_to_homepage()
+        self.open_home()
         self.init_modify_first_contact()
         self.app.change_field_value("firstname", contact.firstname)
         self.app.change_field_value("middlename", contact.middlename)
@@ -23,15 +23,15 @@ class ContactHelper:
         self.return_to_homepage()
 
     def delete_first_contact(self):
-        self.go_to_homepage()
+        self.open_home()
         self.select_first_contact()
         self.submit_deletion()
         self.delete_alert_accept()
-        self.go_to_homepage()
+        self.open_home()
 
     def count(self):
         wd = self.app.wd
-        self.go_to_homepage()
+        self.open_home()
         return len(wd.find_elements("name", "selected[]"))
 
     def select_first_contact(self):
@@ -46,9 +46,10 @@ class ContactHelper:
         wd = self.app.wd
         wd.find_element("link text", "add new").click()
 
-    def go_to_homepage(self):
+    def open_home(self):
         wd = self.app.wd
-        wd.find_element("link text", "home").click()
+        if not (wd.current_url.endswith("/addressbook/") and len(wd.find_elements("name", "searchstring")) > 0):
+            wd.find_element("link text", "home").click()
 
     def return_to_homepage(self):
         wd = self.app.wd
