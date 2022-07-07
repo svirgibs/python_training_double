@@ -44,7 +44,8 @@ class ContactHelper:
 
     def init_add_contact(self):
         wd = self.app.wd
-        wd.find_element("link text", "add new").click()
+        if not (wd.current_url.endswith("/edit.php") and len(wd.find_elements("name", "submit")) > 0):
+            wd.find_element("link text", "add new").click()
 
     def open_home(self):
         wd = self.app.wd
