@@ -24,5 +24,11 @@ class Application:
         wd = self.wd
         wd.get("http://localhost/addressbook/")
 
+    def change_field_value(self, field_name, text):
+        wd = self.wd
+        if text is not None:
+            wd.find_element("name", field_name).clear()
+            wd.find_element("name", field_name).send_keys(text)
+
     def destroy(self):
         self.wd.quit()

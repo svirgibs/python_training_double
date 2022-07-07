@@ -2,6 +2,12 @@ from model.contact import Contact
 
 
 def test_mod_first_contact(app):
-    app.session.login(username="admin", password="secret")
+    if app.contact.count() == 0:
+        app.contact.create(Contact(firstname="Test"))
     app.contact.modify_first(Contact(firstname="Ivan", middlename="Ivanovich", lastname="Ivanov"))
-    app.session.logout()
+
+
+def test_mod_first_contact_middlename(app):
+    if app.contact.count() == 0:
+        app.contact.create(Contact(firstname="Test"))
+    app.contact.modify_first(Contact(middlename="Ivanovich"))

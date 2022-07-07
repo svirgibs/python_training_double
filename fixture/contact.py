@@ -6,39 +6,37 @@ class ContactHelper:
         self.app = app
 
     def create(self, contact):
-        wd = self.app.wd
         self.init_add_contact()
-        wd.find_element("name", "firstname").clear()
-        wd.find_element("name", "firstname").send_keys(contact.firstname)
-        wd.find_element("name", "middlename").clear()
-        wd.find_element("name", "middlename").send_keys(contact.middlename)
-        wd.find_element("name", "lastname").clear()
-        wd.find_element("name", "lastname").send_keys(contact.lastname)
-        wd.find_element("xpath", "//div[@id='content']/form/input[21]").click()
+        self.app.change_field_value("firstname", contact.firstname)
+        self.app.change_field_value("middlename", contact.middlename)
+        self.app.change_field_value("lastname", contact.lastname)
+        self.submit_create()
         self.return_to_homepage()
 
     def modify_first(self, contact):
-        wd = self.app.wd
         self.go_to_homepage()
         self.init_modify_first_contact()
-        wd.find_element("name", "firstname").clear()
-        wd.find_element("name", "firstname").send_keys(contact.firstname)
-        wd.find_element("name", "middlename").clear()
-        wd.find_element("name", "middlename").send_keys(contact.middlename)
-        wd.find_element("name", "lastname").clear()
-        wd.find_element("name", "lastname").send_keys(contact.lastname)
+        self.app.change_field_value("firstname", contact.firstname)
+        self.app.change_field_value("middlename", contact.middlename)
+        self.app.change_field_value("lastname", contact.lastname)
         self.submit_update()
         self.return_to_homepage()
 
     def delete_first_contact(self):
+        self.go_to_homepage()
+        self.select_first_contact()
+        self.submit_deletion()
+        self.delete_alert_accept()
+        self.go_to_homepage()
+
+    def count(self):
         wd = self.app.wd
         self.go_to_homepage()
-        # select first contact
+        return len(wd.find_elements("name", "selected[]"))
+
+    def select_first_contact(self):
+        wd = self.app.wd
         wd.find_element("name", "selected[]").click()
-        # submit deletion
-        wd.find_element("xpath", "//input[@value='Delete']").click()
-        wd.switch_to.alert.accept()
-        self.go_to_homepage()
 
     def init_modify_first_contact(self):
         wd = self.app.wd
@@ -56,6 +54,18 @@ class ContactHelper:
         wd = self.app.wd
         wd.find_element("link text", "home page").click()
 
+    def submit_create(self):
+        wd = self.app.wd
+        wd.find_element("name", "submit").click()
+
     def submit_update(self):
         wd = self.app.wd
         wd.find_element("name", "update").click()
+
+    def submit_deletion(self):
+        wd = self.app.wd
+        wd.find_element("xpath", "//input[@value='Delete']").click()
+
+    def delete_alert_accept(self):
+        wd = self.app.wd
+        wd.switch_to.alert.accept()

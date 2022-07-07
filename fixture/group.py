@@ -31,15 +31,9 @@ class GroupHelper:
         self.return_to_groups_page()
 
     def fill_group_form(self, group):
-        self.change_field_value("group_name", group.name)
-        self.change_field_value("group_header", group.header)
-        self.change_field_value("group_footer", group.footer)
-
-    def change_field_value(self, field_name, text):
-        wd = self.app.wd
-        if text is not None:
-            wd.find_element("name", field_name).clear()
-            wd.find_element("name", field_name).send_keys(text)
+        self.app.change_field_value("group_name", group.name)
+        self.app.change_field_value("group_header", group.header)
+        self.app.change_field_value("group_footer", group.footer)
 
     def delete_first_group(self):
         wd = self.app.wd
@@ -57,3 +51,8 @@ class GroupHelper:
         wd = self.app.wd
         # open groups page
         wd.find_element("link text", "groups").click()
+
+    def count(self):
+        wd = self.app.wd
+        self.open_groups_page()
+        return len(wd.find_elements("name", "selected[]"))
