@@ -12,6 +12,7 @@ def app():
     else:
         if not fixture.is_valid():
             fixture = Application()
+    fixture.open_home_page()
     fixture.session.ensure_login(username="admin", password="secret")
     return fixture
 
