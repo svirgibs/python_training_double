@@ -15,9 +15,9 @@ class ContactHelper:
         self.return_to_homepage()
         self.contact_cache = None
 
-    def modify_first(self, contact):
+    def modify_contact_by_index(self, index, contact):
         self.open_home()
-        self.init_modify_first_contact()
+        self.init_modify_contact_by_index(index)
         self.app.change_field_value("firstname", contact.firstname)
         self.app.change_field_value("middlename", contact.middlename)
         self.app.change_field_value("lastname", contact.lastname)
@@ -25,24 +25,37 @@ class ContactHelper:
         self.return_to_homepage()
         self.contact_cache = None
 
-    def delete_first_contact(self):
+    def delete_contact_by_index(self, index):
         wd = self.app.wd
         self.open_home()
-        self.select_first_contact()
+        self.select_contact_by_index(index)
         self.submit_deletion()
         self.delete_alert_accept()
         wd.find_element("css selector", "div.msgbox")
         self.open_home()
         self.contact_cache = None
 
+    def delete_first_contact(self):
+        self.delete_contact_by_index(0)
+
+    def modify_first(self, contact):
+        self.modify_contact_by_index(0, contact)
+
+    def select_contact_by_index(self, index):
+        wd = self.app.wd
+        wd.find_elements("name", "selected[]")[index].click()
+
+    def select_first_contact(self):
+        self.select_contact_by_index(0)
+
     def count(self):
         wd = self.app.wd
         self.open_home()
         return len(wd.find_elements("name", "selected[]"))
 
-    def select_first_contact(self):
+    def init_modify_contact_by_index(self, index):
         wd = self.app.wd
-        wd.find_element("name", "selected[]").click()
+        wd.find_elements("xpath", "//img[@title='Edit']")[index].click()
 
     def init_modify_first_contact(self):
         wd = self.app.wd
