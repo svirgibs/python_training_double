@@ -13,6 +13,7 @@ class ContactHelper:
         self.app.change_field_value("lastname", contact.lastname)
         self.submit_create()
         self.return_to_homepage()
+        self.contact_cache = None
 
     def modify_first(self, contact):
         self.open_home()
@@ -22,6 +23,7 @@ class ContactHelper:
         self.app.change_field_value("lastname", contact.lastname)
         self.submit_update()
         self.return_to_homepage()
+        self.contact_cache = None
 
     def delete_first_contact(self):
         wd = self.app.wd
@@ -31,6 +33,7 @@ class ContactHelper:
         self.delete_alert_accept()
         wd.find_element("css selector", "div.msgbox")
         self.open_home()
+        self.contact_cache = None
 
     def count(self):
         wd = self.app.wd
@@ -75,12 +78,15 @@ class ContactHelper:
         wd = self.app.wd
         wd.switch_to.alert.accept()
 
+    contact_cache = None
+
     def get_contact_list(self):
-        wd = self.app.wd
-        self.open_home()
-        contacts = []
-        for element in wd.find_elements("name", "entry"):
-            list_tds = element.find_elements("css selector", "td")
-            contact_id = element.find_element("name", "selected[]").get_attribute("value")
-            contacts.append(Contact(lastname=list_tds[1].text, firstname=list_tds[2].text, id=contact_id))
-        return contacts
+        if self.contact_cache is None:
+            wd = self.app.wd
+            self.open_home()
+            self.contact_cache = []
+            for element in wd.find_elements("name", "entry"):
+                list_tds = element.find_elements("css selector", "td")
+                contact_id = element.find_element("name", "selected[]").get_attribute("value")
+                self.contact_cache.append(Contact(lastname=list_tds[1].text, firstname=list_tds[2].text, id=contact_id))
+        return list(self.contact_cache)
