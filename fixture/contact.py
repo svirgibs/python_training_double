@@ -1,3 +1,4 @@
+from model.contact import Contact
 
 
 class ContactHelper:
@@ -23,10 +24,12 @@ class ContactHelper:
         self.return_to_homepage()
 
     def delete_first_contact(self):
+        wd = self.app.wd
         self.open_home()
         self.select_first_contact()
         self.submit_deletion()
         self.delete_alert_accept()
+        wd.find_element("css selector", "div.msgbox")
         self.open_home()
 
     def count(self):
@@ -71,3 +74,13 @@ class ContactHelper:
     def delete_alert_accept(self):
         wd = self.app.wd
         wd.switch_to.alert.accept()
+
+    def get_contact_list(self):
+        wd = self.app.wd
+        self.open_home()
+        contacts = []
+        for element in wd.find_elements("name", "entry"):
+            list_tds = element.find_elements("css selector", "td")
+            contact_id = element.find_element("name", "selected[]").get_attribute("value")
+            contacts.append(Contact(lastname=list_tds[1].text, firstname=list_tds[2].text, id=contact_id))
+        return contacts

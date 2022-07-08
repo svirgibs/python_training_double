@@ -1,3 +1,4 @@
+from model.group import Group
 
 class GroupHelper:
 
@@ -67,3 +68,13 @@ class GroupHelper:
     def submit_deletion(self):
         wd = self.app.wd
         wd.find_element("name", "delete").click()
+
+    def get_group_list(self):
+        wd = self.app.wd
+        self.open_groups_page()
+        groups = []
+        for element in wd.find_elements("css selector", "span.group"):
+            text = element.text
+            id = element.find_element("name", "selected[]").get_attribute("value")
+            groups.append(Group(name=text, id=id))
+        return groups
