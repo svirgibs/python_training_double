@@ -99,7 +99,7 @@ class ContactHelper:
             self.open_home()
             self.contact_cache = []
             for element in wd.find_elements("name", "entry"):
-                list_tds = element.find_elements("css selector", "td")
+                tds_list = element.find_elements("css selector", "td")
                 contact_id = element.find_element("name", "selected[]").get_attribute("value")
-                self.contact_cache.append(Contact(lastname=list_tds[1].text, firstname=list_tds[2].text, id=contact_id))
+                self.contact_cache.append(Contact(lastname=tds_list[1].text, firstname=tds_list[2].text, id=contact_id))
         return list(self.contact_cache)
