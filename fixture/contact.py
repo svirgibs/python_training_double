@@ -12,10 +12,14 @@ class ContactHelper:
         self.app.change_field_value("firstname", contact.firstname)
         self.app.change_field_value("middlename", contact.middlename)
         self.app.change_field_value("lastname", contact.lastname)
+        self.app.change_field_value("address", contact.address)
         self.app.change_field_value("home", contact.homephone)
         self.app.change_field_value("work", contact.workphone)
         self.app.change_field_value("mobile", contact.mobilephone)
         self.app.change_field_value("phone2", contact.secondaryphone)
+        self.app.change_field_value("email", contact.email)
+        self.app.change_field_value("email2", contact.email2)
+        self.app.change_field_value("email3", contact.email3)
         self.submit_create()
         self.return_to_homepage()
         self.contact_cache = None
@@ -120,10 +124,15 @@ class ContactHelper:
             for row in wd.find_elements("name", "entry"):
                 tds_list = row.find_elements("css selector", "td")
                 contact_id = row.find_element("name", "selected[]").get_attribute("value")
-                all_phones = tds_list[5].text.splitlines()
-                self.contact_cache.append(Contact(lastname=tds_list[1].text, firstname=tds_list[2].text, id=contact_id,
-                                                  homephone=all_phones[0], mobilephone=all_phones[1],
-                                                  workphone=all_phones[2], secondaryphone=all_phones[3]))
+                lastname = tds_list[1].text
+                firstname = tds_list[2].text
+                address = tds_list[3].text
+                all_emails = tds_list[4].text
+                all_phones = tds_list[5].text
+                self.contact_cache.append(Contact(lastname=lastname, firstname=firstname, id=contact_id,
+                                                  address=address,
+                                                  all_emails_from_home_page=all_emails,
+                                                  all_phones_from_home_page=all_phones))
         return list(self.contact_cache)
 
     def get_contact_info_from_edit_page(self, index):
@@ -132,11 +141,16 @@ class ContactHelper:
         firstname = wd.find_element("name", "firstname").get_attribute("value")
         lastname = wd.find_element("name", "lastname").get_attribute("value")
         id = wd.find_element("name", "id").get_attribute("value")
+        address = wd.find_element("name", "address").get_attribute("value")
         homephone = wd.find_element("name", "home").get_attribute("value")
         workphone = wd.find_element("name", "work").get_attribute("value")
         mobilephone = wd.find_element("name", "mobile").get_attribute("value")
+        email = wd.find_element("name", "email").get_attribute("value")
+        email2 = wd.find_element("name", "email2").get_attribute("value")
+        email3 = wd.find_element("name", "email3").get_attribute("value")
         secondaryphone = wd.find_element("name", "phone2").get_attribute("value")
-        return Contact(firstname=firstname, lastname=lastname, id=id, homephone=homephone, workphone=workphone,
+        return Contact(firstname=firstname, lastname=lastname, id=id, address=address, homephone=homephone,
+                       workphone=workphone, email=email, email2=email2, email3=email3,
                        mobilephone=mobilephone, secondaryphone=secondaryphone)
 
     def get_contact_from_view_page(self, index):
