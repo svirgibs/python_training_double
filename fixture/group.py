@@ -27,6 +27,15 @@ class GroupHelper:
         self.return_to_groups_page()
         self.group_cache = None
 
+    def modify_group_by_id(self, id, new_group_data):
+        self.open_groups_page()
+        self.select_group_by_id(id)
+        self.open_modification_form()
+        self.fill_group_form(new_group_data)
+        self.submit_update()
+        self.return_to_groups_page()
+        self.group_cache = None
+
     def delete_group_by_index(self, index):
         self.open_groups_page()
         self.select_group_by_index(index)
