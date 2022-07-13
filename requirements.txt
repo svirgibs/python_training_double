@@ -24,3 +24,5 @@ setuptools~=62.2.0
 packaging~=21.3
 wsproto~=1.1.0
 jsonpickle~=2.2.0
+pony~=0.7.16
+PyMySQL~=1.0.2
