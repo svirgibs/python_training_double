@@ -1,5 +1,6 @@
 from model.contact import Contact
 import re
+import time
 
 
 class ContactHelper:
@@ -191,3 +192,30 @@ class ContactHelper:
         secondaryphone = re.search("P: (.*)", text).group(1)
         return Contact(homephone=homephone, workphone=workphone,
                        mobilephone=mobilephone, secondaryphone=secondaryphone)
+
+    def add_contact_into_group(self, id, group_id):
+        wd = self.app.wd
+        self.open_home()
+        self.select_contact_by_id(id)
+        time.sleep(3)
+        self.select_group_by_id(group_id)
+        time.sleep(3)
+        wd.find_element("xpath", "//input[@value='Add to']").click()
+        # self.go_to_home_page()
+
+    def remove_contact_from_group(self, id, gr_id):
+        wd = self.app.wd
+        self.open_home()
+        self.select_group(gr_id)
+        self.select_contact_by_id(id)
+        wd.find_element("xpath", "//*[@name='remove']").click()
+
+    def select_group(self, gr_id):
+        wd = self.app.wd
+        wd.find_element("xpath", "//select[@name='group']").click()
+        wd.find_element("xpath", "//option[@value='%s']" % gr_id).click()
+
+    def select_group_by_id(self, group_id):
+        wd = self.app.wd
+        wd.find_element("xpath", "//select[@name='to_group']").click()
+        wd.find_element("css selector", "select[name='to_group'] option[value='%s']" % group_id).click()
